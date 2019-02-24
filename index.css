@@ -61,3 +61,15 @@ th, td{
     float: left;
     width: 50%;
 }
+
+#mynetwork{
+    display: none;
+    margin: 2% 0 5% 25%;
+    width: 600px;
+    height: 400px;
+    border: 1px solid black;
+}
+
+.clearfix{
+    clear: both;
+}

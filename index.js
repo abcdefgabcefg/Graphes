@@ -114,4 +114,42 @@ function makeRowsAdjacencyMatrix(){
         }
     }
     document.getElementById('adjacency-matrix').style.display = 'block';
-}    
+    getGraph();
+}       
+
+function getGraph(){
+    let nodesData = [];
+    for(let index = 1; index < rowCount + 1; index++){
+        nodesData.push({id: index, label: 'V' + index});
+    }
+    // create an array with nodes
+    var nodes = new vis.DataSet(nodesData);
+
+    let edgesDate = [];
+    for(let columnIndex = 0; columnIndex < columnCount; columnIndex++){
+        let oneEnd = -1, anotherEnd = -1;
+        for(let rowIndex = 0; rowIndex < rowCount; rowIndex++){
+            if(incidenceMatrix[rowIndex][columnIndex] === 1){
+                 if(oneEnd === -1){
+                     oneEnd = rowIndex;
+                 }
+                 else{
+                     anotherEnd = rowIndex;
+                 }
+            }
+        }
+        edgesDate.push({from: oneEnd + 1, to: anotherEnd + 1});
+    }
+    // create an array with edges
+    var edges = new vis.DataSet(edgesDate);
+
+// create a network
+var container = document.getElementById('mynetwork');
+var data = {
+    nodes: nodes,
+    edges: edges
+};
+var options = {};
+var network = new vis.Network(container, data, options);
+container.style.display = 'block';
+}
