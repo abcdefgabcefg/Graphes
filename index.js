@@ -19,7 +19,17 @@ let rowCount, columnCount;
 const tableIncidenceMatrix = document.getElementsByTagName('table')[0];
 const tableAdjacencyMatrix = document.getElementsByTagName('table')[1];
 
+let refresh = false;
+let subrefresh = false;
+
 document.getElementsByTagName('button')[0].addEventListener('click', function(){
+    subrefresh = false;
+    if(refresh){
+        refreshTables();
+    }
+    else{
+        refresh = true;
+    }
     let topCount = document.getElementById('top-count').value;
     let edgeCount = document.getElementById('edge-count').value; 
     if(topCount > 0 && edgeCount > 0){
@@ -30,6 +40,12 @@ document.getElementsByTagName('button')[0].addEventListener('click', function(){
 });
 
 document.getElementsByTagName('button')[1].addEventListener('click', function(){
+    if(subrefresh){
+        refreshHelper();
+    }
+    else{
+        subrefresh = true;
+    }
     for(let rowIndex = 1; rowIndex < rowCount + 1; rowIndex++){
         for(let columnIndex = 1; columnIndex < columnCount + 1; columnIndex++){
             if(Number(tableIncidenceMatrix.rows[rowIndex].cells[columnIndex].innerHTML) === 1){
@@ -152,4 +168,29 @@ var data = {
 var options = {};
 var network = new vis.Network(container, data, options);
 container.style.display = 'block';
+}
+
+function refreshTables(){
+    let table = document.getElementsByTagName('table')[0];
+    table.deleteTHead();
+    table.removeChild(table.getElementsByTagName("tbody")[0]);
+    document.getElementById('incidence-matrix').style.display = 'none';
+    refreshHelper();
+}
+
+function refreshHelper(){
+    table = document.getElementsByTagName('table')[1];
+    table.deleteTHead();
+    table.removeChild(table.getElementsByTagName("tbody")[0]);
+
+    document.getElementById('adjacency-matrix').style.display = 'none';
+    document.getElementById('mynetwork').style.display = 'none';
+    for(let rowIndex = 0; rowIndex < rowCount; rowIndex++){
+        for(let columnIndex = 0; columnIndex < rowCount; columnIndex++){
+            adjacencyMatrix[rowIndex][columnIndex] = 0;
+        }
+        for(let columnIndex = 0; columnIndex < columnCount; columnIndex++){
+            incidenceMatrix[rowIndex][columnIndex] = 0;
+        }
+    }
 }
